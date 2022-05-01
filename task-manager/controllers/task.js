@@ -6,7 +6,13 @@ const createTask = asyncWrapper(async (req, res) => {
     res.status(201).json({ task })
 })
 
+const getAllTasks = asyncWrapper(async (_, res) => {
+    const tasks = await Task.find()
+    return res.json(tasks)
+})
+
 
 module.exports = {
-    createTask
+    createTask,
+    getAllTasks
 }
