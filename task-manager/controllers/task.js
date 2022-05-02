@@ -22,17 +22,26 @@ const getSingleTask = asyncWrapper(async (req, res, next) => {
     return res.json({ task })
 })
 
-const deleteTask = asyncWrapper(async (req, res) => {
+const deleteTask = asyncWrapper(async (req, res, next) => {
     const deletedTask = await Task.findByIdAndDelete(req.params.id)
     if (!deletedTask){
         return next(taskNotFound)
     }
-    return res.json({msg: `Successfully deleted ${deletedTask.name}`})
+    return res.json({msg: `Successfully deleted \"${deletedTask.name}\"`})
+})
+
+const updateTask = asyncWrapper(async (req, res, next) => {
+    const task = await Task.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true})
+    if (!task){
+        return next(taskNotFound)
+    }
+    return res.json({ task })
 })
 
 module.exports = {
     createTask,
     deleteTask,
     getAllTasks,
-    getSingleTask
+    getSingleTask,
+    updateTask
 }
