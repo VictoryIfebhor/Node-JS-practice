@@ -20,7 +20,7 @@ const ProductSchema = new mongoose.Schema({
             message: "{VALUE} is not a supported"
         }
     },
-    feature: {
+    featured: {
         type: Boolean,
         default: false
     }
