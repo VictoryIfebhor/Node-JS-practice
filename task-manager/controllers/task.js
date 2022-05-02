@@ -4,7 +4,7 @@ const { createCustomError } = require("../utils/exception")
 
 const createTask = asyncWrapper(async (req, res) => {
     const task = await Task.create(req.body)
-    res.status(201).json({ task })
+    return res.status(201).json({ task })
 })
 
 const getAllTasks = asyncWrapper(async (_, res) => {
