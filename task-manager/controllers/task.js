@@ -11,7 +11,7 @@ const createTask = asyncWrapper(async (req, res) => {
 
 const getAllTasks = asyncWrapper(async (_, res) => {
     const tasks = await Task.find()
-    return res.json(tasks)
+    return res.json({ tasks })
 })
 
 const getSingleTask = asyncWrapper(async (req, res, next) => {
