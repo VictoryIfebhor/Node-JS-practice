@@ -36,7 +36,7 @@ const mongoURI = process.env.CONNECTION_URL
 // start function
 const start = async () => {
     try {
-        // await connectDB(mongoURI)
+        await connectDB(mongoURI)
         app.listen(port, () => console.log(`Server listening at port ${port}`))
     } catch (error) {
         console.log(error)
