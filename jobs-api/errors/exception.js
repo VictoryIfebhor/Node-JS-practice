@@ -14,7 +14,6 @@ const createCustomError = (message, statusCode) => {
 const invalidCredentials = createCustomError("Invalid Credentials", StatusCodes.UNAUTHORIZED)
 const unauthenticated = createCustomError("Not Authenticated", StatusCodes.UNAUTHORIZED)
 
-
 module.exports = {
     createCustomError,
     CustomHttpError,
