@@ -48,5 +48,4 @@ UserSchema.methods.confirmPassword = function(password) {
     return bcryptjs.compare(password, this.password)
 }
 
-
 module.exports = new mongoose.model("User", UserSchema)
