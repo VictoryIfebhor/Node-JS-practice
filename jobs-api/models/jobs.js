@@ -15,13 +15,14 @@ const JobSchema = new mongoose.Schema({
         type: String,
         default: "pending",
         enum: {
-            values: ["pending", "expired"],
+            values: ["interview", "declined", "pending"],
             message: "{VALUE} is not supported"
         }
     },
     createdBy: {
         type: mongoose.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        required: [true, "User not provided"]
     }
 }, {timestamps: true})
 
