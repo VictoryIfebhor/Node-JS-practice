@@ -9,25 +9,18 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res, next) => {
     const { email, password } = req.body
-
     if (!email || !password) {
         throw createCustomError("Please provide email and password", StatusCodes.BAD_REQUEST)
     }
-
     const user = await User.find({ email })
-    
     if (!user) {
         throw invalidCredentials
     }
-
-    const isPasswordCorrect = user.confirmPassword(password)
-    
+    const isPasswordCorrect = await user.confirmPassword(password)
     if (!isPasswordCorrect) {
         throw invalidCredentials
     }
-
     const token = user.generateToken()
-    
     res.json({ access_token: token, token_type: "Bearer" })
 }
 
