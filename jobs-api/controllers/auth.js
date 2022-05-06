@@ -15,7 +15,7 @@ const loginUser = async (req, res, next) => {
     if (!email || !password) {
         throw noEmailOrPassword
     }
-    const user = await User.find({ email })
+    const user = await User.findOne({ email })
     if (!user) {
         throw invalidCredentials
     }
