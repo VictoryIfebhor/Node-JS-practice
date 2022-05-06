@@ -11,15 +11,21 @@ const loginUser = async (req, res, next) => {
     const { email, password } = req.body
 
     if (!email || !password) {
-        next(createCustomError("Please provide email and password", StatusCodes.BAD_REQUEST))
+        throw createCustomError("Please provide email and password", StatusCodes.BAD_REQUEST)
     }
 
     const user = await User.find({ email })
     
-    if (!user || !user.confirmPassword(password)) {
-        next(invalidCredentials)
+    if (!user) {
+        throw invalidCredentials
     }
+
+    const isPasswordCorrect = user.confirmPassword(password)
     
+    if (!isPasswordCorrect) {
+        throw invalidCredentials
+    }
+
     const token = user.generateToken()
     
     res.json({ access_token: token, token_type: "Bearer" })
