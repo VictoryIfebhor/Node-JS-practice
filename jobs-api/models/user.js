@@ -31,7 +31,7 @@ const UserSchema = new mongoose.Schema({
 }, {timestamps: true})
 
 
-UserSchema.pre("save", function(next) {
+UserSchema.pre("save", async function(next) {
     const salt = await bcryptjs.genSalt()
     const passwordHash = await bcryptjs.hash(this.password, salt)
     this.password = passwordHash
@@ -44,8 +44,9 @@ UserSchema.methods.generateToken = function() {
 }
 
 
-UserSchema.methods.confirmPassword = function(password) {
-    return bcryptjs.compare(password, this.password)
+UserSchema.methods.confirmPassword = async function(password) {
+    const isPasswordCorrect = await bcryptjs.compare(password, this.password)
+    return isPasswordCorrect
 }
 
 module.exports = new mongoose.model("User", UserSchema)
