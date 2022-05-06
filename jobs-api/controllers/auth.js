@@ -1,6 +1,9 @@
 const User = require("../models/user")
 const { StatusCodes } = require('http-status-codes')
-const { createCustomError, invalidCredentials } = require("../errors/exception")
+const { createCustomError } = require("../errors/exception")
+
+const invalidCredentials = createCustomError("Invalid Credentials", StatusCodes.UNAUTHORIZED)
+const noEmailOrPassword = createCustomError("Please provide email and password", StatusCodes.BAD_REQUEST)
 
 const registerUser = async (req, res) => {
     const user = await User.create(req.body)
@@ -10,7 +13,7 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res, next) => {
     const { email, password } = req.body
     if (!email || !password) {
-        throw createCustomError("Please provide email and password", StatusCodes.BAD_REQUEST)
+        throw noEmailOrPassword
     }
     const user = await User.find({ email })
     if (!user) {
