@@ -1,6 +1,7 @@
 require("dotenv").config()
 
 const jwt = require('jsonwebtoken')
+const { StatusCodes } = require("http-status-codes")
 
 const { createCustomError } = require("../errors/exception")
 
