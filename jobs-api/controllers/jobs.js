@@ -2,7 +2,7 @@ const Job = require("../models/jobs")
 const { StatusCodes } = require('http-status-codes')
 const { createCustomError } = require("../errors/exception")
 
-const noJobFound = createCustomError("No such job exists", StatusCodes.BAD_REQUEST)
+const noJobFound = createCustomError("No such job exists", StatusCodes.NOT_FOUND)
 
 const createJob = async (req, res) => {
     const job = await Job.create({ ...req.body, createdBy: req.user._id })
