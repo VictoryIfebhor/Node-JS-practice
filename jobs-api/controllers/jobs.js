@@ -20,7 +20,7 @@ const getJob = async (req, res) => {
 }
 
 const getJobs = async (req, res) => {
-    const jobs = await Job.find({createdBy: req.user._id})
+    const jobs = await Job.find({createdBy: req.user._id}).sort("createdAt")
     res.json({ jobs })    
 }
 
