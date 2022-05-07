@@ -5,12 +5,12 @@ const { createCustomError } = require("../errors/exception")
 const noJobFound = createCustomError("No such job exists", StatusCodes.BAD_REQUEST)
 
 const createJob = async (req, res) => {
-    const job = await Job.create({ ...req.body, createdBy: req.user.id })
+    const job = await Job.create({ ...req.body, createdBy: req.user._id })
     res.status(StatusCodes.CREATED).json({ job })
 }
 
 const getJob = async (req, res) => {
-    const userId = req.user.id
+    const userId = req.user._id
     const jobId = req.params.id
     const job = await Job.findOne({_id: jobId, createdBy: userId})
     if (!job) {
@@ -20,13 +20,13 @@ const getJob = async (req, res) => {
 }
 
 const getJobs = async (req, res) => {
-    const jobs = await Job.find({createdBy: req.user.id})
+    const jobs = await Job.find({createdBy: req.user._id})
     res.json({ jobs })    
 }
 
 const deleteJob = async (req, res) => {
     const jobId = req.params.id
-    const userId = req.user.id
+    const userId = req.user._id
     const job = await Job.findOneAndDelete({_id: jobId, createdBy: userId})
     if (!job) {
         throw noJobFound
@@ -36,8 +36,8 @@ const deleteJob = async (req, res) => {
 
 const updateJob = async (req, res) => {
     const jobId = req.params.id
-    const userId = req.user.id
-    const job = await Job.findOneAndUpdate({_id: jobId, createdBy: userId}, {
+    const userId = req.user._id
+    const job = await Job.findOneAndUpdate({_id: jobId, createdBy: userId}, req.body, {
         new: true,
         runValidators: true
     })

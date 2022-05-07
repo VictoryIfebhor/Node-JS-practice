@@ -10,7 +10,7 @@ const registerUser = async (req, res) => {
     res.status(StatusCodes.CREATED).json({ msg: `${user.fullName} account created successfully` })
 }
 
-const loginUser = async (req, res, next) => {
+const loginUser = async (req, res) => {
     const { email, password } = req.body
     if (!email || !password) {
         throw noEmailOrPassword
