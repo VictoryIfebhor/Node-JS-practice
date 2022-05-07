@@ -4,6 +4,7 @@ require("express-async-errors")
 const express = require('express');
 
 const connectDB = require("./db")
+const authMiddleware = require("./middlewares/auth")
 const errorHandlerMiddleware = require("./middlewares/error-handler")
 const routeNotFound = require("./middlewares/not-found")
 
@@ -18,14 +19,14 @@ app.use(express.json())
 
 
 app.use("api/v1/auth", auth)
-app.use("api/v1/jobs", jobs)
+app.use("api/v1/jobs", authMiddleware, jobs)
 
 
 app.use(routeNotFound)
 app.use(errorHandlerMiddleware)
 
 
-const start = () => {
+const start = async () => {
     const port = process.env.PORT
     const mongoURI = process.env.MONGO_URI
 
