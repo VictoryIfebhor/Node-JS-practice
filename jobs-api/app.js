@@ -10,6 +10,7 @@ const routeNotFound = require("./middlewares/not-found")
 
 const auth = require("./routes/auth")
 const jobs = require("./routes/jobs")
+const users = require("./routes/user")
 
 
 const app = express()
@@ -18,8 +19,11 @@ const app = express()
 app.use(express.json())
 
 
-app.use("api/v1/auth", auth)
-app.use("api/v1/jobs", authMiddleware, jobs)
+app.use("/api/v1/auth", auth)
+
+app.use(authMiddleware)
+app.use("/api/v1/jobs", jobs)
+app.use("/api/v1/users", users )
 
 
 app.use(routeNotFound)
