@@ -2,6 +2,8 @@ require("dotenv").config()
 require("express-async-errors")
 
 const express = require('express')
+const swaggerUi = require('swagger-ui-express')
+const YAML = require('yamljs')
 const rateLimit = require("express-rate-limit")
 const helmet = require('helmet')
 const cors = require('cors')
@@ -19,6 +21,8 @@ const users = require("./routes/user")
 
 
 const app = express()
+const swaggerDocument = YAML.load('./swagger.yml')
+
 
 app.set("trust proxy", 1)
 const limiter = rateLimit({
@@ -36,6 +40,7 @@ app.use(xss())
 
 
 app.get("/", (req, res) => res.send(req.ip))
+app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 app.use("/api/v1/auth", auth)
 
 app.use(authMiddleware)

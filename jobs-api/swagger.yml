@@ -1,0 +1,249 @@
+openapi: 3.0.0
+info:
+  title: Job API (Node.js practice)
+  contact: {}
+  version: '1.0'
+servers:
+- url: https://vickjobsapi.herokuapp.com/api/v1
+  variables: {}
+paths:
+  /users/me:
+    get:
+      tags:
+      - User
+      summary: User Info
+      operationId: UserInfo
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+  /jobs:
+    post:
+      tags:
+      - Job
+      summary: Create Job
+      operationId: CreateJob
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateJobRequest'
+            example:
+              title: Frontend Developer
+              company: Blockchain Lab
+              status: interview
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    get:
+      tags:
+      - Job
+      summary: Get Jobs
+      operationId: GetJobs
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+  /jobs/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The user ID
+    get:
+      tags:
+      - Job
+      summary: Get Job by Id
+      operationId: GetJobbyId
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    patch:
+      tags:
+      - Job
+      summary: Edit Job
+      operationId: EditJob
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditJobRequest'
+            example:
+              company: Blockchain Lab
+              title: Backend Developer
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    delete:
+      tags:
+      - Job
+      summary: Delete Job
+      operationId: DeleteJob
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+  /auth/signup:
+    post:
+      tags:
+      - Auth
+      summary: SIgn up
+      operationId: SIgnup
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SIgnupRequest'
+            example:
+              fullName: Emeka Chris
+              email: mekume@gmail.com
+              password: mekume
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /auth/signin:
+    post:
+      tags:
+      - Auth
+      summary: Login
+      operationId: Login
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              email: victory.ifebhor@gmail.com
+              password: myuniquepassword
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+components:
+  schemas:
+    SIgnupRequest:
+      title: SIgnupRequest
+      required:
+      - fullName
+      - email
+      - password
+      type: object
+      properties:
+        fullName:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          example: johndoe@gmail.com
+        password:
+          type: string
+          example: secretpassword
+      example:
+        fullName: Emeka Chris
+        email: mekume@gmail.com
+        password: mekume
+    LoginRequest:
+      title: LoginRequest
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+          example: johndoe@gmail.com
+        password:
+          type: string
+          example: secretpassword
+      example:
+        email: victory.ifebhor@gmail.com
+        password: myuniquepassword
+    CreateJobRequest:
+      title: CreateJobRequest
+      required:
+      - title
+      - company
+      type: object
+      properties:
+        title:
+          type: string
+          description: title of job must be at least 3 characters long
+        company:
+          type: string
+        status:
+          type: string
+          description: status can be one of either ['pending', 'interview', 'declined']
+          default: pending
+      example:
+        title: Frontend Developer
+        company: Blockchain Lab
+        status: interview
+    EditJobRequest:
+      title: EditJobRequest
+      type: object
+      properties:
+        company:
+          type: string
+        title:
+          type: string
+        status:
+          type: string
+          description: status can be one of either ['pending', 'interview', 'declined']
+      example:
+        company: Blockchain Lab
+        title: Backend Developer
+        status: interview
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+security: []
+tags:
+- name: User
+- name: Job
+- name: Auth
+  description: ''
