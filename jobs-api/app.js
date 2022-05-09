@@ -42,10 +42,8 @@ app.use(xss())
 app.get("/", (req, res) => res.send(req.ip))
 app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 app.use("/api/v1/auth", auth)
-
-app.use(authMiddleware)
-app.use("/api/v1/jobs", jobs)
-app.use("/api/v1/users", users )
+app.use("/api/v1/jobs", authMiddleware, jobs)
+app.use("/api/v1/users", authMiddleware, users )
 
 
 app.use(routeNotFound)
