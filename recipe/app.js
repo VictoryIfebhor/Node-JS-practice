@@ -8,6 +8,7 @@ const connectDB = require("./db")
 const auth = require("./routes/auth")
 const pages = require("./routes/pages")
 const authMiddleware = require("./middlewares/authMiddleware")
+const routeNotFound = require("./middlewares/not-found")
 
 
 const app = express()
@@ -21,6 +22,7 @@ app.set("view engine", "ejs")
 app.use("/users", auth)
 app.get("/:page", authMiddleware, pages)
 
+app.use("/users", routeNotFound)
 
 const start = async () => {
     try {
