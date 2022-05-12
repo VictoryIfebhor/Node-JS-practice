@@ -10,7 +10,12 @@
   <nav>
     <h1><a href="/">Ninja Smoothies</a></h1>
     <ul>
-      <li><a href="/users/login">Login</a></li>
-      <li><a href="/users/signup">Sign up</a></li>
+      <% if (!user) { %>
+        <li><a href="/users/login">Login</a></li>
+        <li><a href="/users/signup">Sign up</a></li>
+      <% } else { %>
+        <li><%= user.email %></li>
+        <li><a href="/users/logout">Sign out</a></li>
+      <% } %>
     </ul>
   </nav>
