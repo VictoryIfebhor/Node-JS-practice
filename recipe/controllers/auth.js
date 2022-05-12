@@ -4,7 +4,8 @@ const User = require("../models/user")
 
 
 const signUpPage = (req, res) => {
-    res.render("signup")
+    res.locals.form = "Sign Up"
+    res.render("form")
 }
 
 const signUpUser = async (req, res) => {
@@ -16,7 +17,8 @@ const signUpUser = async (req, res) => {
 }
 
 const loginPage = (req, res) => {
-    res.render("login")
+    res.locals.form = "Login"
+    res.render("form")
 }
 
 const loginUser = async (req, res) => {
@@ -27,4 +29,9 @@ const loginUser = async (req, res) => {
     return res.json({ user: user._id })
 }
 
-module.exports = { signUpPage, signUpUser, loginPage, loginUser }
+const signOutUser = (req, res) => {
+    res.cookie("jwt", "", { maxAge: 1 })
+    res.redirect("/")
+}
+
+module.exports = { signOutUser, signUpPage, signUpUser, loginPage, loginUser }
