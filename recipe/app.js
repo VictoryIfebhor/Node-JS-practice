@@ -6,9 +6,9 @@ const cookieParser = require('cookie-parser');
 
 const connectDB = require("./db")
 const auth = require("./routes/auth")
-const pages = require("./routes/pages")
-const authMiddleware = require("./middlewares/authMiddleware")
 const routeNotFound = require("./middlewares/not-found")
+const errorHandler = require("./middlewares/errorHandlerMiddleware")
+const { authMiddleware, setLocals} = require("./middlewares/authMiddleware")
 
 
 const app = express()
@@ -19,10 +19,15 @@ app.use(cookieParser())
 
 app.set("view engine", "ejs")
 
+app.use(setLocals)
+app.get("/", (req, res) => res.render("home"))
+app.get("/smoothies", authMiddleware, (req, res) => res.render("smoothies"))
 app.use("/users", auth)
-app.get("/:page", authMiddleware, pages)
+app.post("/users", routeNotFound)
+app.use((req, res) => res.render("notFound"))
 
-app.use("/users", routeNotFound)
+app.use(errorHandler)
+
 
 const start = async () => {
     try {
