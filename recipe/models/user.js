@@ -42,11 +42,11 @@ UserSchema.statics.login = async function(email, password) {
     if (!isEmail(email)) {
         throw createCustomFieldError("email", "Provide a valid email")
     }
-    const user = this.findOne({ email })
+    const user = await this.findOne({ email })
     if (!user) {
         throw createCustomFieldError("email", "No account registered with this email")
     }
-    const isMatch = await bcryptjs.compare(password, this.password)
+    const isMatch = await bcryptjs.compare(password, user.password)
     if (!isMatch) {
         throw createCustomFieldError("password", "Password is invalid")
     }
