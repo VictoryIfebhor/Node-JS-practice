@@ -1,22 +1,29 @@
 require("dotenv").config()
 const jwt = require("jsonwebtoken")
+const User = require("../models/user")
 
-
-const authMiddleware = (req, res, next) => {
+const setLocals = async (req, res, next) => {
     const token = req.cookies.jwt
-    if (!token)  {
-        return res.redirect("/users/login")
+    if (!token) {
+        res.locals.user = null
+    } else {
+        try {
+            const payload = jwt.verify(token, process.env.JWT_SECRET)
+            const user = await User.findById(payload.sub).select("-password")
+            res.locals.user = user
+        } catch {
+            res.locals.user = null
+        }
     }
-    try {
-        /* 
-            for this application, there is no need for the user details in the token
-            the token is only needed to allow the user visit a page
-        */
-        jwt.verify(token, process.env.JWT_SECRET)
-        next()
-    } catch (err) {
-        return res.redirect("/users/login")
-    }
+    next()
 }
 
-module.exports = authMiddleware
+const authMiddleware = (req, res, next) => {
+    const user = res.locals.user
+    if (!user)  {
+        return res.redirect("/users/login")
+    }
+    next()
+}
+
+module.exports = { authMiddleware, setLocals }
