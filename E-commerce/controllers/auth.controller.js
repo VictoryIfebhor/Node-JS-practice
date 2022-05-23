@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import { StatusCodes } from "http-status-codes";
+import { BadRequest } from "../errors/custom-errors.js";
 
 export const registerUser = async (req, res) => {
     const { name, email, password } = req.body
@@ -11,9 +12,12 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
     const { email, password } = req.body
     const user = await User.findOne({ email })
-    const isPasswordCorrect = user.confirmPassword(password)
+    if (!user) {
+        throw new BadRequest("Invalid Credentials")
+    }
+    const isPasswordCorrect = await user.confirmPassword(password)
     if (!isPasswordCorrect) {
-        // haven't created custom errors yet. will come back to this
+        throw new BadRequest("Invalid credentials")
     }
     res.cookie("jwt", user.generateToken(), { maxAge: "1d", httpOnly: true })
     res.status(StatusCodes.OK).json({ msg: "Login successful" })
