@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 import validator from "validator";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken"
 
 const UserSchema = new mongoose.Schema({
     name: {
@@ -26,6 +28,23 @@ const UserSchema = new mongoose.Schema({
         default: "user"
     }
 })
+
+UserSchema.pre("save", async function (next) {
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    this.password = hashedPassword
+    next()
+})
+
+UserSchema.methods.generateToken = function () {
+    const token = jwt.sign({sub: this._id}, process.env.JWT_SECRET, {expiresIn: "1d"})
+    return token
+}
+
+UserSchema.methods.confirmPassword = async function(password) {
+    const isPasswordCorrect = await bcrypt.compare(password, this.password)
+    return isPasswordCorrect
+}
 
 UserSchema.plugin(uniqueValidator, { message: "Email is already registered before"})
 
