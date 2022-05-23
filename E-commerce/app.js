@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import { connectDB } from "./db";
 
+import v1Router from "./routers";
 
 import { notFoundMiddleware } from "./middlewares/not-found.js";
 import { errorHandlerMiddleware } from "./middlewares/error-handler.js";
@@ -9,6 +10,8 @@ import { errorHandlerMiddleware } from "./middlewares/error-handler.js";
 dotenv.config()
 
 const app = express()
+
+app.use("/api/v1", v1Router)
 
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleware)
