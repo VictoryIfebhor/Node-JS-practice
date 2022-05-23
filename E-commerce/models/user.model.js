@@ -37,15 +37,15 @@ UserSchema.pre("save", async function (next) {
 })
 
 UserSchema.methods.generateToken = function () {
-    const token = jwt.sign({sub: this._id}, process.env.JWT_SECRET, {expiresIn: "1d"})
+    const token = jwt.sign({ sub: this._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_LIFETIME })
     return token
 }
 
-UserSchema.methods.confirmPassword = async function(password) {
+UserSchema.methods.confirmPassword = async function (password) {
     const isPasswordCorrect = await bcrypt.compare(password, this.password)
     return isPasswordCorrect
 }
 
-UserSchema.plugin(uniqueValidator, { message: "Email is already registered before"})
+UserSchema.plugin(uniqueValidator, { message: "Email is already registered before" })
 
 export default mongoose.model("User", UserSchema)
