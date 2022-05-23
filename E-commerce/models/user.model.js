@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
-import { isEmail } from "validator";
+import validator from "validator";
 
 const UserSchema = new mongoose.Schema({
     name: {
@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema({
         required: [true, "Email must be provided"],
         unique: true,
         validate: {
-            validator: isEmail,
+            validator: validator.isEmail,
             message: "Email is not valid"
         }
     },

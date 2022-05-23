@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
 import express from "express";
-import { connectDB } from "./db";
+import { connectDB } from "./db/index.js";
 
-import v1Router from "./routers";
+import v1Router from "./routers/index.js";
 
 import { notFoundMiddleware } from "./middlewares/not-found.js";
 import { errorHandlerMiddleware } from "./middlewares/error-handler.js";
