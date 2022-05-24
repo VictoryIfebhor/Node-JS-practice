@@ -36,6 +36,15 @@ UserSchema.pre("save", async function (next) {
     next()
 })
 
+UserSchema.pre("updateOne", async function (next) {
+    const data =  this.getUpdates()
+    if (data.password) {
+        const salt = await bcrypt.genSalt()
+        data.password = await bcrypt.hash(data.password, salt)
+    }
+    next()
+})
+
 UserSchema.methods.generateToken = function () {
     const token = jwt.sign({ id: this._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_LIFETIME })
     return token
