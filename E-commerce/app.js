@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
+import cookieParser from "cookie-parser";
 import { connectDB } from "./db/index.js";
 
 import v1Router from "./routers/index.js";
@@ -10,6 +11,9 @@ import { errorHandlerMiddleware } from "./middlewares/error-handler.js";
 dotenv.config()
 
 const app = express()
+
+app.use(express.json())
+app.use(cookieParser(process.env.JWT_SECRET))
 
 app.use("/api/v1", v1Router)
 
