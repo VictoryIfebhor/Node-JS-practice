@@ -30,14 +30,16 @@ const UserSchema = new mongoose.Schema({
 })
 
 UserSchema.pre("save", async function (next) {
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(this.password, salt);
-    this.password = hashedPassword
+    if (this.isModified("password")) {
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(this.password, salt);
+        this.password = hashedPassword
+    }
     next()
 })
 
 UserSchema.pre("updateOne", async function (next) {
-    const data =  this.getUpdates()
+    const data = this.getUpdates()
     if (data.password) {
         const salt = await bcrypt.genSalt()
         data.password = await bcrypt.hash(data.password, salt)
