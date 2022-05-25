@@ -22,9 +22,12 @@ export const authMiddleware = async (req, res, next) => {
 
 export const permit = (...roles) => {
     return (req, res, next) => {
-        if (!roles.includes(req.user.role)) {
-            throw new ForbiddenError("User not allow to perform this action")
+        if (roles.includes("self") && req.user._id.toString() === req.params.id) {
+            return next()
         }
-        next()
+        if (roles.includes(req.user.role)) {
+            return next()
+        }
+        throw new ForbiddenError("User not allow to perform this action")
     }
 }
