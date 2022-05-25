@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import User from "../models/user.model.js";
-import { BadRequest, NotFoudError } from "../errors/custom-errors.js";
+import { BadRequest, NotFoudError, UnauthenticatedError } from "../errors/custom-errors.js";
 
 export const getAllUsers = async (req, res) => {
     const users = await User.find({ role: "user" }).select("-password")
@@ -23,18 +23,24 @@ export const showCurrentUser = async (req, res) => {
 export const updateUser = async (req, res) => {
     const { email } = req.user
     const { name } = req.body
+    if (!name) {
+        throw new BadRequest("Name was not provided")
+    }
     // mongoose-unique-validator requires that context option be set to query
     const user = await User.findOneAndUpdate({ email }, { name }, { new: true, runValidators: true, context: "query" })
     res.status(StatusCodes.OK).json({ user })
 }
 
 export const updatePassword = async (req, res) => {
-    const { _id:id, email } = req.user
+    const { _id: id, email } = req.user
     const { oldPassword, newPassword } = req.body
+    if (!oldPassword || !newPassword) {
+        throw new BadRequest("Please provide both the old password and the new password")
+    }
     const user = await User.findById(id)
     const isPasswordCorrect = await user.confirmPassword(oldPassword)
     if (!isPasswordCorrect) {
-        throw new BadRequest("Password is incorrect")
+        throw new UnauthenticatedError("Password is incorrect")
     }
     await User.updateOne({ email }, { password: newPassword })
     res.status(StatusCodes.OK).json({ msg: "Password updated successfully" })
