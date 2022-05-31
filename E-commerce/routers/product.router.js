@@ -11,15 +11,13 @@ import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 const router = Router()
 
-// public routes
-router.get("/", getAllProducts)
-router.get("/:id", getSingleProduct)
-
-router.use(authMiddleware)
-
-// protected routes
-router.post("/", createProduct)
+router.route("/")
+  .get(getAllProducts)
+  .post(authMiddleware, createProduct)
 router.route("/:id")
-    .patch(updateProduct)
-    .delete(deleteProduct)
-router.patch("/:id/image", uploadProductImage)
+  .get(getSingleProduct)
+  .patch(authMiddleware, updateProduct)
+  .delete(authMiddleware, deleteProduct)
+router.patch("/image/:id", authMiddleware, uploadProductImage)
+
+export default router

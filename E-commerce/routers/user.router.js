@@ -12,11 +12,10 @@ const router = Router()
 
 router.use(authMiddleware)
 
+router.get("/", permit("admin"), getAllUsers)
 router.get("/me", showCurrentUser)
+router.get("/:id", permit("admin", "self"), getSingleUser)
 router.patch("/", updateUser)
 router.patch("/password", updatePassword)
-
-router.get("/:id", permit("admin", "self"), getSingleUser)
-router.get("/", permit("admin"), getAllUsers)
 
 export default router
