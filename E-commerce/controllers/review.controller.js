@@ -4,44 +4,44 @@ import { deleteKeys } from "../utils/helper.js";
 import { NotFoudError } from "../errors/custom-errors.js";
 
 export const getAllReviews = async (req, res) => {
-    const reviews = await Review.find()
-    res.status(StatusCodes.OK).json({ reviews })
-}
+  const reviews = await Review.find();
+  res.status(StatusCodes.OK).json({ reviews });
+};
 
 export const getSingleReview = async (req, res) => {
-    const { id } = req.params
-    const review = await Review.findById(id)
-    res.status(StatusCodes.OK).json({ review })
-}
+  const { id } = req.params;
+  const review = await Review.findById(id);
+  res.status(StatusCodes.OK).json({ review });
+};
 
 export const createReview = async (req, res) => {
-    const user = req.user._id
-    deleteKeys(req.body, "user")
-    const review = await Review.create({ ...req.body, user })
-    res.status(StatusCodes.CREATED).json({ review })
-}
+  const user = req.user._id;
+  deleteKeys(req.body, "user");
+  const review = await Review.create({ ...req.body, user });
+  res.status(StatusCodes.CREATED).json({ review });
+};
 
 export const updateReview = async (req, res) => {
-    const { id } = req.params
-    const { _id: user } = req.user
-    const { title, rating, comment } = req.body
-    const review = await Review.findOneAndUpdate(
-        { _id: id, user },
-        { title, rating, comment },
-        { new: true, runValidators: true }
-    )
-    if (!review) {
-        throw new NotFoudError("No such review found")
-    }
-    res.status(StatusCodes.OK).json({ review })
-}
+  const { id } = req.params;
+  const { _id: user } = req.user;
+  const { title, rating, comment } = req.body;
+  const review = await Review.findOneAndUpdate(
+    { _id: id, user },
+    { title, rating, comment },
+    { new: true, runValidators: true }
+  );
+  if (!review) {
+    throw new NotFoudError("No such review found");
+  }
+  res.status(StatusCodes.OK).json({ review });
+};
 
 export const deleteReview = async (req, res) => {
-    const { id } = req.params
-    const { _id: user } = req.user
-    const review = await Review.findOneAndDelete({ _id: id, user })
-    if (!review) {
-        throw new NotFoudError("No such review found")
-    }
-    res.status(StatusCodes.OK).json({ review })
-}
+  const { id } = req.params;
+  const { _id: user } = req.user;
+  const review = await Review.findOneAndDelete({ _id: id, user });
+  if (!review) {
+    throw new NotFoudError("No such review found");
+  }
+  res.status(StatusCodes.OK).json({ msg: "Review deleted successfully" });
+};
