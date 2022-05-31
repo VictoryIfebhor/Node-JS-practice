@@ -7,6 +7,7 @@ import {
   updateProduct,
   uploadProductImage,
 } from "../controllers/product.controller.js";
+import { getSingleProductReviews } from "../controllers/review.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 const router = Router();
@@ -17,6 +18,7 @@ router
   .get(getSingleProduct)
   .patch(authMiddleware, updateProduct)
   .delete(authMiddleware, deleteProduct);
-router.patch("/image/:id", authMiddleware, uploadProductImage);
+router.patch("/:id/image", authMiddleware, uploadProductImage);
+router.get("/:id/reviews", getSingleProductReviews);
 
 export default router;

@@ -14,7 +14,7 @@ export const createProduct = async (req, res) => {
 
 export const getSingleProduct = async (req, res) => {
   const { id } = req.params;
-  const product = await Product.findById(id);
+  const product = await Product.findById(id).populate("reviews");
   if (!product) {
     throw new NotFoudError("Product does not exists");
   }

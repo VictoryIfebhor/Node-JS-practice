@@ -4,13 +4,29 @@ import { deleteKeys } from "../utils/helper.js";
 import { NotFoudError } from "../errors/custom-errors.js";
 
 export const getAllReviews = async (req, res) => {
-  const reviews = await Review.find();
+  const reviews = await Review.find()
+    .populate({
+      path: "product",
+      select: "name price company",
+    })
+    .populate({
+      path: "user",
+      select: "name",
+    });
   res.status(StatusCodes.OK).json({ reviews });
 };
 
 export const getSingleReview = async (req, res) => {
   const { id } = req.params;
-  const review = await Review.findById(id);
+  const review = await Review.findById(id)
+    .populate({
+      path: "product",
+      select: "name price company",
+    })
+    .populate({
+      path: "user",
+      select: "name",
+    });
   res.status(StatusCodes.OK).json({ review });
 };
 
@@ -44,4 +60,10 @@ export const deleteReview = async (req, res) => {
     throw new NotFoudError("No such review found");
   }
   res.status(StatusCodes.OK).json({ msg: "Review deleted successfully" });
+};
+
+export const getSingleProductReviews = async (req, res) => {
+  const { id: product } = req.params;
+  const reviews = await Review.find({ product });
+  res.status(StatusCodes.OK).json({ reviews });
 };
