@@ -74,7 +74,12 @@ ProductSchema.virtual("reviews", {
   ref: "Review",
   localField: "_id",
   foreignField: "product",
-  justOne: false
+  justOne: false,
+});
+
+ProductSchema.pre("remove", async function (next) {
+  await this.model("Review").deleteMany({ product: this._id });
+  next();
 });
 
 export default mongoose.model("Product", ProductSchema);

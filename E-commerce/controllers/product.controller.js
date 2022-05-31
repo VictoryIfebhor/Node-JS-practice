@@ -49,10 +49,11 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   const { _id: user } = req.user;
-  const product = await Product.findOneAndDelete({ _id: req.params.id, user });
+  const product = await Product.findOne({ _id: req.params.id, user });
   if (!product) {
     throw new NotFoudError("Product does not exists");
   }
+  await product.remove();
   res.status(StatusCodes.OK).json({ msg: "Product deleted successfully" });
 };
 
