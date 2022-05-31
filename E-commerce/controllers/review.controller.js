@@ -41,24 +41,25 @@ export const updateReview = async (req, res) => {
   const { id } = req.params;
   const { _id: user } = req.user;
   const { title, rating, comment } = req.body;
-  const review = await Review.findOneAndUpdate(
-    { _id: id, user },
-    { title, rating, comment },
-    { new: true, runValidators: true }
-  );
+  const review = await Review.findOne({ _id: id, user });
   if (!review) {
     throw new NotFoudError("No such review found");
   }
+  review.title = title
+  review.rating = rating
+  review.comment = comment
+  await review.save()
   res.status(StatusCodes.OK).json({ review });
 };
 
 export const deleteReview = async (req, res) => {
   const { id } = req.params;
   const { _id: user } = req.user;
-  const review = await Review.findOneAndDelete({ _id: id, user });
+  const review = await Review.findOne({ _id: id, user });
   if (!review) {
     throw new NotFoudError("No such review found");
   }
+  await review.remove()
   res.status(StatusCodes.OK).json({ msg: "Review deleted successfully" });
 };
 

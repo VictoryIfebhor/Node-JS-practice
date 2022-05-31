@@ -35,10 +35,11 @@ export const getAllProducts = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   const { _id: user } = req.user;
-  deleteKeys(req.body, "user", "averageRating", "image");
+  const body = req.body
+  deleteKeys(body, "user", "averageRating", "image", "numberOfReviews");
   const product = await Product.findOneAndUpdate(
     { _id: req.params.id, user },
-    req.body,
+    body,
     { new: true, runValidators: true }
   );
   if (!product) {
