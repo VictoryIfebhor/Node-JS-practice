@@ -21,7 +21,6 @@ export const getSingleProduct = async (req, res) => {
 
 export const getAllProducts = async (req, res) => {
     let { limit, skip, sort } = req.query
-    const productQuery = Product.find()
     limit = limit || 50
     skip = skip || 0
     sort = sort?.split(",").join(" ") || "-averageRating price"
