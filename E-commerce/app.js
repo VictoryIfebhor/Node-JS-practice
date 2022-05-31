@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 import express from "express";
 import cookieParser from "cookie-parser";
+import fileUpload from "express-fileupload";
+import cloudinaryConfig from "./utils/cloudinary.js";
 import { connectDB } from "./db/index.js";
 
 import v1Router from "./routers/index.js";
@@ -12,8 +14,11 @@ dotenv.config()
 
 const app = express()
 
+cloudinaryConfig()
+
 app.use(express.json())
 app.use(cookieParser(process.env.JWT_SECRET))
+app.use(fileUpload({ useTempFiles: true }))
 
 app.use("/api/v1", v1Router)
 
